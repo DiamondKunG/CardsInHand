@@ -21,10 +21,12 @@ function getHandScore(input) {
         'K': 10,
         'A': 11,
     };
+    var rankCounts = {};
     cards.forEach(function (card) {
         var suit = card.charAt(0);
         var rank = card.substr(1);
         suits[suit] += ranks[rank];
+        rankCounts[rank] = (rankCounts[rank] || 0) + 1;
     });
     console.log(input);
     console.log('Score values for each suit:');
@@ -38,6 +40,25 @@ function getHandScore(input) {
             maxSuit = suit;
             break;
         }
+    }
+    var rankScore = 0;
+    var hasThreeOfAKind = false;
+    for (var rank in rankCounts) {
+        if (rankCounts[rank] === 3) {
+            hasThreeOfAKind = true;
+            if (rank === 'A') {
+                rankScore = 35;
+            }
+            else {
+                rankScore = 32.5;
+            }
+            break;
+        }
+    }
+    if (hasThreeOfAKind) {
+        console.log("Max of ".concat(maxScore, " ").concat(maxSuit, ", ").concat(suits['C'], " C, ").concat(suits['H'], " H, ").concat(suits['D'], " D is ").concat(maxScore));
+        console.log("So the score is ".concat(rankScore, " here."));
+        return rankScore;
     }
     console.log("Max of ".concat(maxScore, " ").concat(maxSuit, ", ").concat(suits['C'], " C, ").concat(suits['H'], " H, ").concat(suits['D'], " D is ").concat(maxScore));
     console.log("So the score is ".concat(maxScore, " here."));
